@@ -3,19 +3,38 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Recipe Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<h1>My recipes!</h1>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Description</th>
-    </tr>
-    <tr th:each="recipe: ${recipies}">
-        <td th:text="${recipe.id}"></td>
-        <td th:text="${recipe.description}"></td>
-    </tr>
-</table>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+                    <h1 class="panel-title">My Recipes!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover ">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}"></td>
+                                <td th:text="${recipe.description}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
