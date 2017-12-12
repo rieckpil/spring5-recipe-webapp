@@ -1,5 +1,7 @@
 package de.rieckpil.recipewebapp.services;
 
+import de.rieckpil.recipewebapp.converters.RecipeCommandToRecipe;
+import de.rieckpil.recipewebapp.converters.RecipeToRecipeCommand;
 import de.rieckpil.recipewebapp.domain.Recipe;
 import de.rieckpil.recipewebapp.repositories.RecipeRepository;
 import org.junit.Before;
@@ -23,9 +25,15 @@ public class RecipeServiceImplTest {
     @Mock
     private RecipeRepository mockedRepository;
 
+    @Mock
+    private RecipeCommandToRecipe mockedRecipeCommandToRecipe;
+
+    @Mock
+    private RecipeToRecipeCommand mockedRecipeToRecipeCommand;
+
     @Before
     public void setUp() {
-        cut = new RecipeServiceImpl(mockedRepository);
+        cut = new RecipeServiceImpl(mockedRepository, mockedRecipeToRecipeCommand, mockedRecipeCommandToRecipe);
     }
 
     @Test
