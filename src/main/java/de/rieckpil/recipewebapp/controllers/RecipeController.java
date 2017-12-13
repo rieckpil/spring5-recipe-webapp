@@ -2,10 +2,12 @@ package de.rieckpil.recipewebapp.controllers;
 
 import de.rieckpil.recipewebapp.commands.RecipeCommand;
 import de.rieckpil.recipewebapp.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 public class RecipeController {
 
@@ -47,10 +49,11 @@ public class RecipeController {
         return "redirect:/recipe/" + saveCommand.getId() + "/show/";
     }
 
-    @RequestMapping("/show/new")
-    public String saveOrUpdate(){
+    @RequestMapping("/recipe/{id}/delete")
+    public String deleteRecipe(@PathVariable String id){
 
-
-        return "redirect:/error";
+        log.debug("deleting recipe by id: " + id);
+        recipeService.deleteById(Long.valueOf(id));
+        return "redirect:/";
     }
 }
