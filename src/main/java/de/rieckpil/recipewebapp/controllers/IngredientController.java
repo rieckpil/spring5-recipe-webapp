@@ -1,6 +1,8 @@
 package de.rieckpil.recipewebapp.controllers;
 
 import de.rieckpil.recipewebapp.commands.IngredientCommand;
+import de.rieckpil.recipewebapp.commands.RecipeCommand;
+import de.rieckpil.recipewebapp.commands.UnitOfMeasureCommand;
 import de.rieckpil.recipewebapp.domain.UnitOfMeasure;
 import de.rieckpil.recipewebapp.services.IngredientService;
 import de.rieckpil.recipewebapp.services.RecipeService;
@@ -37,6 +39,24 @@ public class IngredientController {
     }
 
     @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String createNewIngredient(@PathVariable String recipeId, Model model){
+
+        RecipeCommand recipeCommand = recipeService.getCommandById(Long.valueOf(recipeId));
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(recipeCommand.getId());
+        model.addAttribute("ingredient", ingredientCommand);
+
+        ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
+
+        model.addAttribute("uomList", unitOfMeasureService.getAllUnitOfMeasures());
+
+        return "recipe/ingredient/ingredientform";
+
+    }
+
+    @GetMapping
     @RequestMapping("/recipe/{recipeId}/ingredient/{id}/show")
     public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
 
@@ -63,5 +83,15 @@ public class IngredientController {
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(ingredientCommand);
 
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" +savedCommand.getId() +  "/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/{id}/delete")
+    public String deleteIngredient(@PathVariable String recipeId, @PathVariable String id){
+
+        log.debug("deleteing ingredient with id: " + id + " from recipe with id: " + recipeId);
+        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(id));
+
+        return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 }
