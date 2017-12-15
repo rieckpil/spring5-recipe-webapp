@@ -1,11 +1,15 @@
 package de.rieckpil.recipewebapp.controllers;
 
 import de.rieckpil.recipewebapp.commands.RecipeCommand;
+import de.rieckpil.recipewebapp.exceptions.NotFoundException;
 import de.rieckpil.recipewebapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
@@ -55,5 +59,17 @@ public class RecipeController {
         log.debug("deleting recipe by id: " + id);
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFoundException(Exception exception){
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("404error");
+        modelAndView.addObject("exception", exception);
+
+        return modelAndView;
     }
 }

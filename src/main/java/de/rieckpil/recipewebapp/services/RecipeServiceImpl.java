@@ -4,6 +4,7 @@ import de.rieckpil.recipewebapp.commands.RecipeCommand;
 import de.rieckpil.recipewebapp.converters.RecipeCommandToRecipe;
 import de.rieckpil.recipewebapp.converters.RecipeToRecipeCommand;
 import de.rieckpil.recipewebapp.domain.Recipe;
+import de.rieckpil.recipewebapp.exceptions.NotFoundException;
 import de.rieckpil.recipewebapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
         if(!recipeOptional.isPresent()){
-            throw new RuntimeException("Recipe not found!");
+            throw new NotFoundException("Recipe with id: " + id + " not found!");
         }
 
         return recipeOptional.get();

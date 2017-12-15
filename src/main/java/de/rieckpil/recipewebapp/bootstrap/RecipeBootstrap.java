@@ -151,10 +151,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         recipes.add(guacRecipe);
 
         //Yummy Tacos
+
+
         Recipe tacosRecipe = new Recipe();
         tacosRecipe.setDescription("Spicy Grilled Chicken Taco");
-        tacosRecipe.setCookTime(9);
-        tacosRecipe.setPrepTime(20);
+        tacosRecipe.setCookTime((int) (Math.round(Math.random() * 100)));
+        tacosRecipe.setPrepTime((int) (Math.round(Math.random() * 20)));
         tacosRecipe.setDifficulty(Difficulty.MODERATE);
 
         tacosRecipe.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat.\n" +
@@ -209,6 +211,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         tacosRecipe.setSource("Simply Recipes");
 
         recipes.add(tacosRecipe);
+
         return recipes;
     }
 }
