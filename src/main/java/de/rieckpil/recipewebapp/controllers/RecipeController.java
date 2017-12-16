@@ -8,8 +8,12 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import java.io.FileNotFoundException;
 
 @Slf4j
 @Controller
@@ -46,7 +50,17 @@ public class RecipeController {
 
     @PostMapping
     @RequestMapping("/recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand){
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+
+            return "recipe/recipeform";
+
+        }
 
         RecipeCommand saveCommand = recipeService.saveRecipeCommand(recipeCommand);
 
@@ -72,4 +86,29 @@ public class RecipeController {
 
         return modelAndView;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormatException(Exception exception){
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("400error");
+        modelAndView.addObject("exception", exception);
+
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(FileNotFoundException.class)
+    public ModelAndView handleFileNotFoundException(Exception exception){
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("404error");
+        modelAndView.addObject("exception", exception);
+
+        return modelAndView;
+    }
 }
+
